@@ -1,5 +1,8 @@
+import { Body } from "@nestjs/common";
+import { AuthDto } from "./dto";
+
 export class AuthService{
-      createTask(){
+      createTask(@Body() dto: AuthDto){
         return 'task created'
       }  
 }
