@@ -13,6 +13,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
+model User{
+   id Int @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedt DateTime @updatedAt
+
+  email: String @unique
+  hash,
+
+  firstName: String
+  lastName: String
+}
 model Task{
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
