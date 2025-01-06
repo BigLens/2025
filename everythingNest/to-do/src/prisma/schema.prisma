@@ -24,6 +24,9 @@ model User{
 
   firstName: String
   lastName: String
+
+    tasks Task[]
+    @@map('users')
 }
 model Task{
   id Int @id @default(autoincrement())
@@ -34,4 +37,9 @@ model Task{
   task: String
   title: String
   completed: String
+
+  userId id
+  user User @relation(fields:[userId], references:[id])
+
+  @@map('tasks')
 }
