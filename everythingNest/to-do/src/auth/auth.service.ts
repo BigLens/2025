@@ -1,7 +1,7 @@
-import { AuthDto } from "./dto";
+import { AuthDto } from '../dto';
 
-export class AuthService{
-      createTask(dto: AuthDto){
-        return {msg: 'task created'}
-      }  
+export class AuthService {
+  createTask(dto: AuthDto) {
+    return { msg: 'task created' };
+  }
 }
