@@ -1,11 +1,11 @@
-import { Body, Controller, Post } from "@nestjs/common";
+import { Body, Controller, Post, Get } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { AuthDto } from "./dto";
 
-@Controller()
+@Controller('tasks')
 export class AuthController{
     constructor(private authservice: AuthService){}
-    @Post()
+    @Get('first')
     createTask(@Body() dto: AuthDto){
         return this.authservice.createTask(dto)
     }
