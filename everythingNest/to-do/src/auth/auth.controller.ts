@@ -8,5 +8,7 @@ export class AuthController {
   @Post('private')
   signUp(@Body() dto: AuthDto) {
     return this.authservice.signUp(dto);
+    
   }
+  
 }
