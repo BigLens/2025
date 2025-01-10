@@ -9,6 +9,7 @@ import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 export class AuthService {
   constructor(private prisma: PrismaService){}
   async signup(dto: AuthDto) {
+    
     if(!dto.email || dto.email.trim() === ''){
       throw new ForbiddenException('email cannot be empty')
     }
