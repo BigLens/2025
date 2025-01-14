@@ -5,9 +5,6 @@ import * as argon from 'argon2'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { config } from 'process';
-import { promises } from 'dns';
-import { access } from 'fs';
 
 
 @Injectable()
@@ -18,6 +15,9 @@ export class AuthService {
     
     if(!dto.email || dto.email.trim() === ''){
       throw new ForbiddenException('email cannot be empty')
+    }
+    if(!dto.password || dto.password.trim() === ''){
+      throw new ForbiddenException('password cannot be empty')
     }
     const checkIfUserExist = await this.prisma.user.findUnique({
       where: {email: dto.email}
