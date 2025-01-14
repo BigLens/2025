@@ -10,11 +10,6 @@ export class UserController {
 
     @Get(':id')
     async getUser(@Param('id') userId: number): Promise<Partial<User>>{
-        // const parseIntt = parseInt(userId)
-        // if (isNaN(parseIntt)) {
-        //     throw new BadRequestException('Invalid user ID');
-        //   }
-       
         const getTheUser = await this.userService.getUser(userId)
         const {hash, ...noHash} = getTheUser;
         return noHash;
