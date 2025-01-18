@@ -58,12 +58,12 @@ export class AuthService {
     if(!pswd){
       throw new ForbiddenException('invalid password')
     }
-    const theToken = await this.userToken(verifyUserSignin.id.toString(), verifyUserSignin.email)
+    const theToken = await this.userToken(verifyUserSignin.id, verifyUserSignin.email)
 
     return theToken;
   }
 
-  async userToken(userId: string, email: string): Promise<{access_token: string}>{
+  async userToken(userId: number, email: string): Promise<{access_token: string}>{
     const payload = {sub: userId, email};
     const token = await this.jwt.signAsync(payload, {
       expiresIn: "1hr",

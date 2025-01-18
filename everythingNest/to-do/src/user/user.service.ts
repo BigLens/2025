@@ -8,9 +8,8 @@ export class UserService {
     constructor(private prisma: PrismaService){}
 
     async getUser(userId: number){
-        const id = Number(userId)
         return await this.prisma.user.findUnique({
-            where: {id}, 
+            where: {id: Number(userId)}, 
         })
     }
 }
