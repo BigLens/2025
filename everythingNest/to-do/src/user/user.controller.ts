@@ -1,15 +1,14 @@
-import { Controller, Get, NotFoundException, Param, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import { GetUser } from 'src/customDeco';
 import { User } from '@prisma/client';
-import { AuthGuard } from 'src/guard';
+import { JwtAuthGuard } from 'src/auth/guard';
 
 
 @Controller('user')
 export class UserController {
     constructor(private userService: UserService){}
 
-    @UseGuards(AuthGuard)
+    @UseGuards(JwtAuthGuard)
     @Get(':id')
     async getUser(@Param('id') userId: number): Promise<Partial<User>>{
         const getTheUser = await this.userService.getUser(userId)
