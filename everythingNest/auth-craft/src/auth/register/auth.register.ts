@@ -7,9 +7,9 @@ import { JwtService } from "@nestjs/jwt";
 export class AuthRegister{
     constructor(private config: ConfigService, private jwt: JwtService){}
 
-    register(email: string, password: string){
+    async register(email: string, password: string){
         //check if user exist
-        const checkIfUserExist = userMock.find(user => user.email === email)
+        const checkIfUserExist =  userMock.find(user => user.email === email)
         if(checkIfUserExist){
             const payload = {id: checkIfUserExist.id, email: checkIfUserExist.email}
             const token = this.jwt.sign(payload,{
