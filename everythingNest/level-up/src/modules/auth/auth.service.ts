@@ -1,7 +1,7 @@
 import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { UserEntity } from '../auth/model/auth.entity';
+import { UserEntity } from '@modules/auth/model/auth.entity';
 import { UserDto } from '../auth/dto/auth.dto';
 import * as argon2 from 'argon2';
 
