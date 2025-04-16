@@ -4,7 +4,7 @@ POST http://localhost:4001/auth/create-user
 Content-Type: application/json
 
 {
-    "email": "BigLens@gmail.com",
+    "email": "BigggLens@gmail.com",
     "password": "password"
 }
 
@@ -13,6 +13,6 @@ POST http://localhost:4001/auth/login
 Content-Type: application/json
 
 {
-    "email": "adedejibioku@gmail.com",
+    "email": "BigggLens@gmail.com",
     "password": "password"
 }

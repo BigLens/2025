@@ -5,9 +5,9 @@
     "outDir": "./dist",
     "baseUrl": "./",
     "paths": {
-      "@modules/*": ["modules/*"],
-      "@common/*": ["common/*"],
-      "@utils/*": ["utils/*"],
+      "@modules/*": ["src/modules/*"],
+      "@common/*": ["src/common/*"],
+      "@utils/*": ["src/utils/*"],
     }
   }
 }

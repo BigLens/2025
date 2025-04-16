@@ -4,12 +4,14 @@ import { Repository } from 'typeorm';
 import { UserEntity } from '@modules/auth/model/auth.entity';
 import { UserDto } from '@modules/auth/dto/auth.dto';
 import * as argon2 from 'argon2';
+import { JwtToken } from '@modules/jwt/jwt.service';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
+    private jwtToken: JwtToken
   ) {}
 
   async createUser(dto: UserDto): Promise<Partial<UserEntity>> {
@@ -33,7 +35,7 @@ export class AuthService {
     return withoutPassword;
   }
 
-  async login(dto: UserDto) {
+  async login(dto: UserDto): Promise<{access_token:string}>{
     //check if user exist
     const user = await this.userRepo.findOne({
       where: {
@@ -47,14 +49,9 @@ export class AuthService {
     //check if password match
     const passwordMatch = await argon2.verify(user.password, dto.password)
     if (!passwordMatch) {
-      throw new NotFoundException('incorrect password')
+      throw new NotFoundException('incorrect password');
     }
-    const logUser = await this.userRepo.findOne({
-      where: {
-        email: dto.email,
-      }
-    })
-    const {password, ...noPasword} = logUser;
-    return noPasword;
+    const Token = await this.jwtToken.token(dto.id, dto.email);
+    return Token;
   }
 }
