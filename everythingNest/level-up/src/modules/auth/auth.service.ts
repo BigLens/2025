@@ -54,4 +54,15 @@ export class AuthService {
     const Token = await this.jwtToken.token(dto.id, dto.email);
     return Token;
   }
+
+  async getUser(dto: UserDto) {
+    const getUser = await this.userRepo.findOne({where: {email: dto.email}})
+
+    if(!getUser) {
+      throw new NotFoundException('user does not exist')
+    }
+
+    const {password, ...noPasswordd} = getUser
+    return noPasswordd;
+  }
 }

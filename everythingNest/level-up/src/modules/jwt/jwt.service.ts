@@ -10,7 +10,7 @@ export class JwtToken {
     ) {}
 
     async token(id: number, email: string) :Promise<{access_token:string}>{
-        const payload = {id: id, email}
+        const payload = {id, email}
         const token = await this.jwt.signAsync(payload, {
             expiresIn: '1hr',
             secret: this.config.get("JWT_SECRET")
