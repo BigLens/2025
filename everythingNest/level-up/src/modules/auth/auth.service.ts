@@ -5,6 +5,7 @@ import { UserEntity } from '@modules/auth/model/auth.entity';
 import { UserDto } from '@modules/auth/dto/auth.dto';
 import * as argon2 from 'argon2';
 import { JwtToken } from '@modules/jwt/jwt.service';
+import { AuthResponseDto } from './dto/error-response.dto';
 
 @Injectable()
 export class AuthService {
@@ -31,8 +32,7 @@ export class AuthService {
     });
     const holder = await this.userRepo.save(create);
 
-    const {password, ...withoutPassword} = holder;
-    return withoutPassword;
+    return new AuthResponseDto(holder)
   }
 
   async login(dto: UserDto): Promise<{access_token:string}>{
@@ -62,7 +62,6 @@ export class AuthService {
       throw new NotFoundException('user does not exist')
     }
 
-    const {password, ...noPasswordd} = getUser
-    return noPasswordd;
+    return new AuthResponseDto(getUser)
   }
 }
