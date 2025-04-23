@@ -1,4 +1,4 @@
-import { UserDto } from "@modules/auth/dto/auth.dto";
+import { UserDto } from "@modules/auth/dto/user.dto";
 import { Injectable } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 import { PassportStrategy } from "@nestjs/passport";

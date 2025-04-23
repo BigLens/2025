@@ -9,7 +9,7 @@ export class JwtToken {
         private config: ConfigService,
     ) {}
 
-    async token(id: number, email: string) :Promise<{access_token:string}>{
+    async token(id: string, email: string) :Promise<{access_token:string}>{
         const payload = {id, email}
         const token = await this.jwt.signAsync(payload, {
             expiresIn: '1hr',

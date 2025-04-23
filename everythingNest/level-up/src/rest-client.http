@@ -4,7 +4,7 @@ POST http://localhost:4001/auth/create-user
 Content-Type: application/json
 
 {
-    "email": "BigLensss@gmail.com",
+    "email": "BigLenns@gmail.com",
     "password": "password"
 }
 

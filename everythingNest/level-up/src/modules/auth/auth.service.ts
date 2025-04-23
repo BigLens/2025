@@ -1,21 +1,26 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '@modules/auth/model/auth.entity';
-import { UserDto } from '@modules/auth/dto/auth.dto';
+import { CreateUserDto } from '@modules/auth/dto/crate-user.dto';
 import * as argon2 from 'argon2';
 import { JwtToken } from '@modules/jwt/jwt.service';
 import { AuthResponseDto } from './dto/error-response.dto';
+import { UserDto } from './dto/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
-    private jwtToken: JwtToken
+    private jwtToken: JwtToken,
   ) {}
 
-  async createUser(dto: UserDto): Promise<Partial<UserEntity>> {
+  async createUser(dto: CreateUserDto): Promise<Partial<UserEntity>> {
     //check if user exist
     const user = await this.userRepo.findOne({
       where: { email: dto.email },
@@ -32,22 +37,22 @@ export class AuthService {
     });
     const holder = await this.userRepo.save(create);
 
-    return new AuthResponseDto(holder)
+    return new AuthResponseDto(holder);
   }
 
-  async login(dto: UserDto): Promise<{access_token:string}>{
+  async login(dto: UserDto): Promise<{ access_token: string }> {
     //check if user exist
     const user = await this.userRepo.findOne({
       where: {
         email: dto.email,
-      }
-    })
-    if(!user) {
-      throw new NotFoundException('user not found')
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('user not found');
     }
 
     //check if password match
-    const passwordMatch = await argon2.verify(user.password, dto.password)
+    const passwordMatch = await argon2.verify(user.password, dto.password);
     if (!passwordMatch) {
       throw new NotFoundException('incorrect password');
     }
@@ -56,12 +61,22 @@ export class AuthService {
   }
 
   async getUser(dto: UserDto) {
-    const getUser = await this.userRepo.findOne({where: {email: dto.email}})
+    const getUser = await this.userRepo.findOne({
+      where: { email: dto.email },
+    });
 
-    if(!getUser) {
-      throw new NotFoundException('user does not exist')
+    if (!getUser) {
+      throw new NotFoundException('user does not exist');
     }
 
-    return new AuthResponseDto(getUser)
+    return new AuthResponseDto(getUser);
+  }
+
+  async getUserId(dto: UserDto) {
+    const findId = await this.userRepo.findOne({
+      where: {
+        id: dto.id,
+      },
+    });
   }
 }
