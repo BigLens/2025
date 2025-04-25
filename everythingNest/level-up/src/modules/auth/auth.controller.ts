@@ -20,10 +20,9 @@ export class AuthController {
     return this.authService.login(dto);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @Get('user')
-  async getUser() {
-    return this.authService.getUser();
+  @Get('users')
+  async getAllUser() {
+    return this.authService.getAllUser();
   }
 
   @UseGuards(JwtAuthGuard)

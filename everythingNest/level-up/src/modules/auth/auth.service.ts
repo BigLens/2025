@@ -60,7 +60,7 @@ export class AuthService {
     return Token;
   }
 
-  async getUser() {
+  async getAllUser() {
     const getUser = await this.userRepo.find()
 
     if (!getUser) {
