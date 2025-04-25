@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, UseGuards } from '@nestjs/common';
 import { AuthService } from '@modules/auth/auth.service';
 import { UserDto } from '@modules/auth/dto/user.dto';
 import { JwtAuthGuard } from '@modules/jwt/jwt-guard';
 import { User } from './custom-decorator/custom-user';
 import { CreateUserDto } from './dto/crate-user.dto';
+import { Request } from 'express';
 
 @Controller('auth')
 export class AuthController {
@@ -21,7 +22,13 @@ export class AuthController {
 
   @UseGuards(JwtAuthGuard)
   @Get('user')
-  async getUser(@User() user: UserDto) {
-    return this.authService.getUser(user);
+  async getUser() {
+    return this.authService.getUser();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('user-id/:id')
+  async getUserId(@Param('id') id: string) {
+    return this.authService.getUserId(id);
   }
 }

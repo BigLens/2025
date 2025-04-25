@@ -60,23 +60,26 @@ export class AuthService {
     return Token;
   }
 
-  async getUser(dto: UserDto) {
-    const getUser = await this.userRepo.findOne({
-      where: { email: dto.email },
-    });
+  async getUser() {
+    const getUser = await this.userRepo.find()
 
     if (!getUser) {
       throw new NotFoundException('user does not exist');
     }
-
-    return new AuthResponseDto(getUser);
+    return getUser
   }
 
-  async getUserId(dto: UserDto) {
+  async getUserId(id: string) {
     const findId = await this.userRepo.findOne({
       where: {
-        id: dto.id,
+        id: id,
       },
     });
+
+    if (!findId) {
+      throw new NotFoundException('user does not exist');
+    }
+
+    return new AuthResponseDto(findId);
   }
 }
