@@ -61,12 +61,12 @@ export class AuthService {
   }
 
   async getAllUser() {
-    const getUser = await this.userRepo.find()
+    const getUser = await this.userRepo.find();
 
     if (!getUser) {
       throw new NotFoundException('user does not exist');
     }
-    return getUser
+    return getUser;
   }
 
   async getUserId(id: string) {

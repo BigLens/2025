@@ -8,7 +8,10 @@ import { JwtToken } from '@modules/jwt/jwt.service';
 import { JwtStrategy } from '@modules/jwt/jwt-strategy';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([UserEntity]), JwtModule.register({global: true})],
+  imports: [
+    TypeOrmModule.forFeature([UserEntity]),
+    JwtModule.register({ global: true }),
+  ],
   controllers: [AuthController],
   providers: [AuthService, JwtToken, JwtStrategy],
 })
