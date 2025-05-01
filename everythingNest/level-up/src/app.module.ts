@@ -22,7 +22,7 @@ import dataSource from './database/data-source';
         }
         return dataSource;
       },
-      }),
+    }),
     AuthModule,
   ],
   controllers: [BookController],
