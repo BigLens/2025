@@ -1,11 +1,15 @@
-import { IsEmail, IsString } from 'class-validator';
+import { Expose } from "class-transformer";
 
 export class UserDto {
+  @Expose()
   id: string;
 
-  @IsEmail()
+  @Expose()
   email: string;
 
-  @IsString()
-  password: string;
+  @Expose()
+  createdAt: Date;
+  
+  @Expose()
+  updatedAt: Date;
 }
