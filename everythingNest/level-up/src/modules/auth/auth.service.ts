@@ -1,28 +1,31 @@
-import { ConflictException, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UserEntity } from '@modules/auth/model/auth.entity';
-import { UserDto } from '@modules/auth/dto/auth.dto';
+import { CreateUserDto } from '@modules/auth/dto/crate-user.dto';
 import * as argon2 from 'argon2';
 import { JwtToken } from '@modules/jwt/jwt.service';
-import { AuthResponseDto } from './dto/error-response.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(UserEntity)
     private userRepo: Repository<UserEntity>,
-    private jwtToken: JwtToken
+    private jwtToken: JwtToken,
   ) {}
 
-  async createUser(dto: UserDto): Promise<Partial<UserEntity>> {
-    //check if user exist
+  async createUser(dto: CreateUserDto): Promise<Partial<UserEntity>> {
     const user = await this.userRepo.findOne({
       where: { email: dto.email },
     });
 
     if (user) {
-      throw new ConflictException('user already exist');
+      throw new ConflictException('User already exists');
     }
 
     const hashedPassword = await argon2.hash(dto.password);
@@ -32,36 +35,75 @@ export class AuthService {
     });
     const holder = await this.userRepo.save(create);
 
-    return new AuthResponseDto(holder)
+    return holder;
   }
 
-  async login(dto: UserDto): Promise<{access_token:string}>{
-    //check if user exist
+  async login(
+    dto: CreateUserDto,
+  ): Promise<{ user: Partial<UserEntity>; access_token: string }> {
     const user = await this.userRepo.findOne({
       where: {
         email: dto.email,
-      }
-    })
-    if(!user) {
-      throw new NotFoundException('user not found')
+      },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
     }
 
-    //check if password match
-    const passwordMatch = await argon2.verify(user.password, dto.password)
+    const passwordMatch = await argon2.verify(user.password, dto.password);
     if (!passwordMatch) {
-      throw new NotFoundException('incorrect password');
+      throw new NotFoundException('Incorrect password');
     }
-    const Token = await this.jwtToken.token(dto.id, dto.email);
-    return Token;
+    const Token = await this.jwtToken.token(user);
+    return { user, access_token: Token.access_token };
   }
 
-  async getUser(dto: UserDto) {
-    const getUser = await this.userRepo.findOne({where: {email: dto.email}})
+  async getAllUser() {
+    const users = await this.userRepo.find();
 
-    if(!getUser) {
-      throw new NotFoundException('user does not exist')
+    if (!users) {
+      throw new NotFoundException('No users found');
+    }
+    return users;
+  }
+
+  async getUserId(id: string, requestingUser: UserEntity) {
+    const user = await this.userRepo.findOne({
+      where: { id },
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (user.id !== requestingUser.id) {
+      throw new ForbiddenException(
+        "You do not have permission to access this user's data",
+      );
+    }
+    return user;
+  }
+
+  async deleteUserById(id: string, requestingUser: UserEntity) {
+    const user = await this.userRepo.findOne({
+      where: { id }
+    });
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    if (user.id !== requestingUser.id) {
+      throw new ForbiddenException(
+        'You do not have permission to delete this account',
+      );
     }
 
-    return new AuthResponseDto(getUser)
+    try {
+      const result = await this.userRepo.delete(id);
+
+      if (result.affected === 0) {
+        throw new NotFoundException('Failed to delete user');
+      }
+      return { message: 'User successfully deleted' };
+    } catch (error) {
+      throw new NotFoundException('Failed to delete user');
+    }
   }
 }

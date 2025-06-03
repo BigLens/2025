@@ -4,7 +4,7 @@ POST http://localhost:4001/auth/create-user
 Content-Type: application/json
 
 {
-    "email": "BigLensss@gmail.com",
+    "email": "BigggLennns@gmail.com",
     "password": "password"
 }
 
@@ -13,6 +13,16 @@ POST http://localhost:4001/auth/login
 Content-Type: application/json
 
 {
-    "email": "BigLensss@gmail.com",
+    "email": "BigggLennns@gmail.com",
     "password": "password"
 }
+
+### get user id
+GET http://localhost:4001/auth/user-id/a327eabd-aad2-46b5-afb6-f73429742903
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEzMjdlYWJkLWFhZDItNDZiNS1hZmI2LWY3MzQyOTc0MjkwMyIsImVtYWlsIjoiQmlnZ2dMZW5ucy5nb29nbGVAZ21haWwuY29tIiwiaWF0IjoxNzE5MzYxMjM5LCJleHAiOjE3MTk5NjYwMzl9.0000000000000000000000000000000000000000
+
+### get user
+GET http://localhost:4001/auth/users
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImEzMjdlYWJkLWFhZDItNDZiNS1hZmI2LWY3MzQyOTc0MjkwMyIsImVtYWlsIjoiQmlnZ2dMZW5ucy5nb29nbGVAZ21haWwuY29tIiwiaWF0IjoxNzE5MzYxMjM5LCJleHAiOjE3MTk5NjYwMzl9.0000000000000000000000000000000000000000

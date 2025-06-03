@@ -1,28 +1,53 @@
-import { Body, Controller, Get, Post, Req, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Post,
+  Delete,
+  UseGuards,
+} from '@nestjs/common';
 import { AuthService } from '@modules/auth/auth.service';
-import { UserDto } from '@modules/auth/dto/auth.dto';
+import { UserDto } from '@modules/auth/dto/user.dto';
 import { JwtAuthGuard } from '@modules/jwt/jwt-guard';
-import { Request } from 'express';
 import { User } from './custom-decorator/custom-user';
+import { CreateUserDto } from './dto/crate-user.dto';
+import { Serialize } from './interceptor/interceptor.class';
+import { LoginResponseDto } from './dto/login-response.dto';
+import { UserEntity } from './model/auth.entity';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('create-user')
-  async createUser(@Body() dto: UserDto) {
+  @Serialize(UserDto)
+  async createUser(@Body() dto: CreateUserDto) {
     return this.authService.createUser(dto);
   }
 
-
   @Post('login')
-  async login(@Body() dto: UserDto) {
-    return this.authService.login(dto)
+  @Serialize(LoginResponseDto)
+  async login(@Body() dto: CreateUserDto) {
+    return this.authService.login(dto);
+  }
+
+  @Get('users')
+  @Serialize(UserDto)
+  async getAllUser() {
+    return this.authService.getAllUser();
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('user')
-  async getUser(@User() user: UserDto) {
-    return this.authService.getUser(user)
+  @Get('user/:id')
+  @Serialize(UserDto)
+  async getUserId(@Param('id') id: string, @User() user: UserEntity) {
+    return this.authService.getUserId(id, user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Delete('user/:id')
+  async deleteUser(@Param('id') id: string, @User() user: UserEntity) {
+    return this.authService.deleteUserById(id, user);
   }
 }

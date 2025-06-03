@@ -1,12 +1,12 @@
-import { CreateDateColumn, Entity, UpdateDateColumn } from "typeorm";
+import { CreateDateColumn, Entity, UpdateDateColumn } from 'typeorm';
 
 @Entity()
-export class BaseEntity{
-    id: string
+export class BaseEntity {
+  id: string;
 
-    @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
-    createdAt: Date
+  @CreateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  createdAt: Date;
 
-    @UpdateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
-    updatedAt: Date
+  @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  updatedAt: Date;
 }
