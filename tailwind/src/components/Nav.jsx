@@ -26,6 +26,9 @@ const Nav = () => {
               </li>
             ))}
             </ul>
+            <div className="lg:hidden">
+              <img src={hamburger} alt="Hamburger" width={25} height={25} />
+            </div>
         </nav>
     </header>
   )
